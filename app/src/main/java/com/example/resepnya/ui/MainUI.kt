@@ -9,12 +9,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.resepnya.datasource.Sort
 import com.example.resepnya.model.Recipe
+import com.example.resepnya.model.Recipes
 import com.example.resepnya.viewmodel.RecipeViewModel
 import dagger.hilt.EntryPoint
 
@@ -36,7 +40,8 @@ fun MainUI() {
 @Composable
 fun RecipeView() {
     val viewModel: RecipeViewModel = hiltViewModel()
-    val recipes: List<Recipe> = viewModel.recipeList.value?.recipes ?: listOf()
+
+    val recipes : List<Recipe> = viewModel.recipeList.value?.recipes ?: emptyList()
 
     LaunchedEffect(Unit) {
         viewModel.loadRecipes(10, 0, Sort.NAME.name.lowercase())

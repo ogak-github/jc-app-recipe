@@ -1,12 +1,17 @@
 package com.example.resepnya.viewmodel
 
+import androidx.compose.ui.util.fastReduce
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.resepnya.datasource.Sort
 import com.example.resepnya.model.Recipes
 import com.example.resepnya.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -16,18 +21,17 @@ class RecipeViewModel @Inject constructor(val repo: RecipeRepository) : ViewMode
     private val _recipeList = MutableLiveData<Recipes>()
     val recipeList: LiveData<Recipes> = _recipeList
 
-    suspend fun loadRecipes(limit: Int, skip: Int, sortBy: String): Recipes {
-        return withContext(Dispatchers.IO) {
-            // Perform the network request or database call on the IO dispatcher
-            val recipes = repo.getAllRecipes(limit, skip, sortBy)
-
-            // Update LiveData or state; this will be thread-safe and observe the architectural guidelines
-            withContext(Dispatchers.Main) {
-                _recipeList.value = recipes
+    suspend fun loadRecipes(limit: Int, skip: Int, sortBy: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAllRecipes(limit, skip, sortBy).let {
+                _recipeList.postValue(it)
             }
 
-            // Return the loaded recipes
-            recipes
+        }
+        recipeList.value?.recipes?.forEach {
+            println(it.name)
         }
     }
+
+
 }
