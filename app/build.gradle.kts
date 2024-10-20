@@ -40,11 +40,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "19"
     }
     buildFeatures {
         compose = true
@@ -84,13 +84,16 @@ dependencies {
     //kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 
-
     implementation(libs.androidx.livedata.ktx)
     implementation(libs.androidx.viewmodel.ktx)
     implementation(libs.androidx.viewmodel.compose)
     implementation(libs.androidx.viewmodel.savedstate)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.coil.compose)
+    implementation(libs.navigation.compose)
 
+    implementation(libs.octicons)
 
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
